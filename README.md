@@ -1,8 +1,13 @@
 # Prometheus TP-Link Smarthome Collector
 
-This is a prometheus collector for pulling metrics from a TP-Link Smarthome (Kasa) device.
+This is a prometheus collector for pulling metrics from a TP-Link Smarthome (Kasa) device. It utilizes
+the local protocol exposed by each device rather than the cloud API. Since TP-Links are embedded devices,
+this collector is a proxy collector similar to the snmp_exporter tool and functions largely the same way.
 
 ## Example
+
+The Collector implements a proxy collector similar to the snmp_exporter for prometheus. In your prometheus.yml,
+specify your targets and specify relabel_configs to send the request through the smarthome collector.
 
 ```yml
   - job_name: 'prometheus-smarthome'
@@ -18,6 +23,18 @@ This is a prometheus collector for pulling metrics from a TP-Link Smarthome (Kas
       - target_label: __address__
         replacement: 127.0.0.1:2112  # The prometheus-smarthome's real hostname:port.
 ```
+
+## Building and running
+
+```sh
+cd cmd/prometheus-smarthome
+go build
+./prometheus-smarthome -port 2112
+```
+
+## Contributing
+
+Patches are greatly appreciated, especially to support additional collection points for various device types.
 
 ## License
 
